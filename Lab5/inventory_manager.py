@@ -1,3 +1,9 @@
+import json
+import os
+
+INVENTORY_FILE = "inventory.json"
+
+
 def display_all(inventory):
     """
     In:  inventory (list of dict)
@@ -61,9 +67,24 @@ def update_stock(inventory, product_id, new_stock):
     return True
 
 
-inventory = []
-add_product(inventory, "P001", "Laptop", 1200.00, 15)
-add_product(inventory, "P002", "Mouse", 25.50, 40)
-add_product(inventory, "P003", "Keyboard", 45.00, 25)
+def load_inventory():
+    """
+    In:  (nothing)
+    Out: the list of products read from INVENTORY_FILE,
+         or an empty list if the file does not exist yet
+    """
+    if not os.path.exists(INVENTORY_FILE):
+        print(f"{INVENTORY_FILE} not found.")
+        print("Starting with an empty inventory.")
+        return []
 
+    print(f"{INVENTORY_FILE} found.")
+    with open(INVENTORY_FILE, "r") as file:
+        inventory = json.load(file)
+
+    print("Inventory loaded successfully.")
+    return inventory
+
+
+inventory = load_inventory()
 display_all(inventory)
